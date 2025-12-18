@@ -44,6 +44,12 @@ class _NewItemState extends State<NewItem> {
   }
 
   void onReset() {
+    setState(() {
+      _nameController.text = defautName;
+      _quantityController.text = defaultQuantity.toString();
+      _selectedCategory = GroceryCategory.fruit;
+
+    });
     // Will be implemented later - Reset all fields to the initial values
   }
 
