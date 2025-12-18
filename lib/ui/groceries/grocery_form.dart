@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../models/grocery.dart';
@@ -17,7 +19,7 @@ class _NewItemState extends State<NewItem> {
   static const defautName = "New grocery";
   static const defaultQuantity = 1;
   static const defaultCategory = GroceryCategory.fruit;
-
+  final uuid = Uuid();
   // Inputs
   final _nameController = TextEditingController();
   final _quantityController = TextEditingController();
@@ -47,9 +49,18 @@ class _NewItemState extends State<NewItem> {
 
   void onAdd() {
     // Will be implemented later - Create and return the new grocery
+    final  quantityEnterd = int.tryParse(_quantityController.text);
+    final grocery = Grocery(
+      id: uuid.v4(),
+      name: _nameController.text,
+      quantity: quantityEnterd!,
+      category: _selectedCategory,
+    );
+
+    Navigator.of(context).pop(grocery);
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add a new item')),
@@ -76,7 +87,12 @@ class _NewItemState extends State<NewItem> {
                 Expanded(
                   child: DropdownButtonFormField<GroceryCategory>(
                     initialValue: _selectedCategory,
-                    items: [  ],
+                    items: GroceryCategory.values.map((c){
+                      return DropdownMenuItem<GroceryCategory>(
+                        value: c,
+                        child: Text(c.name),
+                        );
+                    }).toList(),
                     onChanged: (value) {
                       if (value != null) {
                         setState(() {
@@ -103,5 +119,7 @@ class _NewItemState extends State<NewItem> {
         ),
       ),
     );
-  }
+
 }
+}
+
